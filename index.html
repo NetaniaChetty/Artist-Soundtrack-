@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<head>
+<title>TAYLOR SWIFT</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap">
+
+<style>
+  :root{
+    --mesh-rose:#FF69B4;
+    --mesh-green:#7CFC00;
+    --bg-1:#000000;
+    --bg-2:#050508;
+    --bg-3:#101015;
+    --text:#eef1f7;
+    --muted:#98a2b3;
+    --glass:rgba(255,255,255,.08);
+    --glass-border:rgba(255,255,255,.15);
+    --accent:#FFD700;
+    --accent2:#9400D3;
+
+    --radius-shell:28px;
+    --radius-card:18px;
+    --shadow-outer:0 40px 80px rgba(0,0,0,.65);
+    --shadow-inner:inset 0 0 0.1px rgba(255,255,255,.3);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;overflow-x:hidden}
+  a{color:var(--text);text-decoration:none}
+  img{max-width:100%;display:block;border-radius:12px; height: auto;}
+
+  body{
+    background-color: var(--bg-1);
+  }
+
+  
+  #starsCanvas {
+    position: fixed;
+    inset: 0; 
+    z-index: -2; 
+    pointer-events: none;
+  }
+  
+  body::after{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(1200px circle at 50% 110%, rgba(0,0,0,.7), transparent 40%),
+      radial-gradient(1200px circle at -10% -20%, rgba(0,0,0,.65), transparent 45%),
+      repeating-radial-gradient(circle at 30% 30%, rgba(255, 105, 180, .1) 0 .8px, transparent .8px 3px),
+      repeating-radial-gradient(circle at 70% 50%, rgba(255, 215, 0, .15) 0 .8px, transparent .8px 3px),
+      repeating-radial-gradient(circle at 10% 80%, rgba(148, 0, 211, .1) 0 .8px, transparent .8px 3px);
+    mix-blend-mode:soft-light;
+  }
+
+  header{
+    position:fixed; top:20px;
+    left:50%; transform:translateX(-50%);
+    width:min(1180px,92%); z-index:10;
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; border-radius:14px;
+    backdrop-filter:blur(8px);
+    background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+    border:1px solid var(--glass-border);
+  }
+  .brand{font-weight:900; letter-spacing:.6px; font-size: 1.25rem; color: var(--accent);}
+  .nav ul{all:unset; display:flex;
+    gap:18px}
+  .nav a{opacity:.9; transition: opacity .3s;}
+  .nav a:hover {opacity: 1; color: var(--accent);}
+
+  .shell{
+    width:min(1180px,92%);
+    margin:200px auto 48px;
+    border-radius:var(--radius-shell);
+    background:
+      radial-gradient(1200px circle at 10% -10%, rgba(255,255,255,.08), rgba(255,255,255,.05)),
+      linear-gradient(180deg, rgba(0,0,0,.8), rgba(0,0,0,.9));
+    border:1px solid var(--glass-border);
+    box-shadow:var(--shadow-outer), var(--shadow-inner);
+    overflow:hidden; position:relative;
+  }
+  .shell::before{content:""; position:absolute; left:0; right:0; top:0; height:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,.1), transparent)}
+
+  .hero{display:grid; grid-template-columns:1.15fr .85fr; gap:24px;
+    padding:36px 24px 28px}
+  @media (max-width:960px){ .hero{grid-template-columns:1fr} }
+
+  .hero-left{
+    position:relative; padding:24px; border-radius:20px;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border:1px solid var(--glass-border); overflow:hidden;
+    animation:floatY 8s ease-in-out infinite;
+  }
+  @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .hero-title{
+    font-size:clamp(28px,5.6vw,64px);
+    margin:0 0 8px;
+    font-weight:900; letter-spacing:.8px; text-transform:uppercase;
+    background:linear-gradient(90deg, var(--accent), var(--accent2) 50%, var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 6px 24px rgba(255,215,0,.25);
+  }
+  .hero-sub{color:var(--muted);
+    max-width:70ch}
+
+  .hud{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+  .glass{
+    display:flex; gap:10px; align-items:center;
+    background:var(--glass); border:1px solid var(--glass-border);
+    color:#e5f2ff; border-radius:16px;
+    padding:10px 14px; backdrop-filter:blur(6px);
+  }
+  .ico{
+    width:34px; height:34px; display:grid; place-items:center; border-radius:10px;
+    background:linear-gradient(135deg, rgba(148,0,211,.3), rgba(255,215,0,.3));
+    border:1px solid rgba(255,255,255,.18);
+  }
+  .cta{
+    margin-left:auto; display:flex; align-items:center; gap:10px;
+    padding:12px 16px; border-radius:16px; font-weight:800; text-transform:uppercase;
+    background:linear-gradient(90deg, var(--accent2), var(--accent));
+    color:#031b26;
+    border:1px solid rgba(255,255,255,.18);
+    filter:drop-shadow(0 12px 28px rgba(0,0,0,.55));
+  }
+  .play{
+    width:34px; height:34px; display:grid; place-items:center; border-radius:50%;
+    background:#151520;
+    color:var(--accent);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.18);
+  }
+
+  .wave-wrap{position:absolute; inset:0; z-index:-1; opacity:.45}
+  svg.wave{position:absolute;
+    bottom:-6px; left:0; width:160%; height:60%}
+  .wave path{stroke:url(#grad); stroke-width:1.6; fill:none; opacity:.85}
+  .wave .grid{opacity:.35}
+  #grad stop:nth-child(1) { stop-color: var(--accent); }
+  #grad stop:nth-child(2) { stop-color: var(--accent2); }
+  #grad stop:nth-child(3) { stop-color: var(--mesh-rose); }
+
+
+  .hero-right{
+    position:relative;
+    border-radius:20px; overflow:hidden;
+    background:
+      radial-gradient(120px 200px at 70% 30%, rgba(255,255,255,.15), transparent 60%),
+      radial-gradient(280px 220px at 32% 66%, rgba(148,0,211,.3), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    border:1px solid var(--glass-border); min-height:340px;
+    display: grid; place-items: center;
+  }
+  .orb{
+    display: none;
+  }
+  .hero-image-placeholder {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+  }
+
+  section.content{display:grid;
+    grid-template-columns:1.1fr .9fr; gap:24px; padding:10px 24px 28px}
+  @media (max-width:960px){ section.content{grid-template-columns:1fr} }
+
+  .panel{
+    padding:20px; border-radius:var(--radius-card);
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(6px);
+    opacity:0; transform:translateY(16px) scale(.98); transition:opacity .6s ease, transform .6s ease;
+  }
+  .panel.revealed{opacity:1; transform:translateY(0) scale(1)}
+  .h2{font-size:clamp(18px,3.2vw,24px);
+    margin:0 0 10px; font-weight:900; letter-spacing:.4px; color:var(--accent); text-transform:uppercase}
+  .about p{color:var(--muted); margin-bottom: 1em; line-height: 1.6;}
+  .mini-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+  .btn{all:unset; display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:12px; font-weight:700;
+    background:linear-gradient(90deg, var(--mesh-rose), var(--accent));
+    color:#031b26; border:1px solid rgba(255,255,255,.18);
+    cursor: pointer;
+  }
+
+  .media{display:grid; grid-template-columns:1fr; gap:12px}
+  .caption{color:#9ea7b8;
+    font-size:12px; text-align: right; padding-right: 4px;
+  }
+
+  .timeline{padding:10px 24px 28px}
+  .grid{display:grid; grid-template-columns:repeat(3,1fr);
+    gap:18px}
+  @media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} }
+  .album-card{background:var(--glass); border:1px solid var(--glass-border); border-radius:16px;
+    overflow:hidden; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .3s;}
+  .album-card:hover {transform: translateY(-4px);}
+  .album-card img {height: auto; width: 100%; object-fit: cover; aspect-ratio: 1 / 1;}
+  .album-card .info{padding:12px}
+  .album-card h4{margin:0 0 6px; font-size:16px}
+  .album-card .year{color:#9ca3af; font-weight:700; letter-spacing:.2px}
+  .album-card .era{color:var(--accent2);
+    font-weight:600}
+
+  .favorites{padding:10px 24px 28px}
+  .songs{columns:2; gap:18px}
+  @media (max-width:700px){ .songs{columns:1} }
+  .songs li{break-inside:avoid;
+    margin-bottom:8px; color: var(--text); border-bottom: 1px dashed rgba(255,255,255,.1);}
+  .songs strong {color: var(--accent);}
+
+  footer{padding:18px 24px; text-align:center; color:#9ea7b8}
+</style>
+</head>
+<body>
+
+<canvas id="starsCanvas"></canvas>
+
+<header>
+  <nav class="nav">
+    <div class="brand">TAYLOR SWIFT</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Taylor_Swift" target="_blank" rel="noopener">About</a></li>
+      <li><a href="https://store.taylorswift.com/" target="_blank" rel="noopener">Store</a></li>
+      <li><a href="https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02" target="_blank" rel="noopener">Listen</a></li>
+      </ul>
+    </nav>
+</header>
+
+<main class="shell" id="home">
+
+  <section class="hero">
+    <div
+      class="hero-left" id="heroLeft">
+      <h1 class="hero-title">TAYLOR SWIFT</h1>
+      <p class="hero-sub">
+      Hey there, Welcome to my personal corner of the internet dedicated to the one and only Taylor Swift. Her journey, from a country music dreamer in Pennsylvania to a global icon and a true lyrical mastermind, is genuinely inspiring.
+      </p>
+
+      <div class="hud">
+        <div class="glass">
+          <div class="ico">🎵</div>
+          <div>
+            <div style="font-weight:800">Albums Timeline</div>
+            <div style="color:#9ea7b3; font-size:13px">Years & highlights</div>
+          </div>
+        </div>
+        <div class="glass">
+          <div class="ico">⭐</div>
+          <div>
+            <div style="font-weight:800">The Eras Tour</div>
+            <div style="color:#9ea7b3; font-size:13px">Current Events</div>
+          </div>
+        </div>
+
+        <a id="listenCta" class="cta" href="https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02" target="_blank" rel="noopener">
+          <span>Stream Her Music Now!</span>
+          <span class="play">▶</span>
+        </a>
+      </div>
+
+      <div class="wave-wrap">
+        <svg class="wave" viewBox="0 0 1200 400" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FFD700"/> <stop offset="50%" stop-color="#9400D3"/> <stop offset="100%" stop-color="#FF69B4"/> </linearGradient>
+          </defs>
+          <g class="grid">
+            <path d="M0,360 L1200,360" stroke="url(#grad)"/>
+            <path d="M0,320 L1200,320" stroke="url(#grad)"/>
+            <path d="M0,280 L1200,280" stroke="url(#grad)"/>
+            <path d="M0,240 L1200,240" stroke="url(#grad)"/>
+            <path d="M0,200 L1200,200" stroke="url(#grad)"/>
+          </g>
+          <path id="wave1" d="M0,300 C200,260 300,340 500,300 C700,260 850,340 1200,300" />
+          <path id="wave2" d="M0,260 C200,220 300,300 500,260 C700,220 850,300 1200,260" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero-right" id="heroRight">
+      <img src="https://th.bing.com/th/id/OIP.2d5VAL3X09NDZ091qkp6DgHaEK?w=294&h=180&c=7&r=0&o=7&cb=ucfimg2&dpr=1.3&pid=1.7&rm=3&ucfimg=1" alt="Taylor Swift and Travis Kelce" class="hero-image-placeholder">
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="panel about">
+      <h2 class="h2">About Taylor Swift</h2>
+      <p>
+        Taylor Swift is an American singer-songwriter celebrated for her autobiographical songwriting, genre versatility, and record-breaking achievements in music. She is, simply put, a cultural phenomenon.
+      </p>
+      <p>
+        Born on December 13, 1989, Taylor always had music in her soul, a legacy she inherited from her opera-singing grandmother. It's legendary: she moved to Nashville at just 14 to chase that country dream. She signed with Big Machine, dropped her self-titled debut (hello, "Tim McGraw"!), and then blew up with the critically acclaimed *Fearless* in 2008. Seriously, who didn't scream-sing "Love Story" in their bedroom? That album was pure magic and rightfully snagged her multiple Grammys.
+      </p>
+      <p>
+        She's since fearlessly genre-hopped through pop, synth-pop, and gorgeous indie-folk albums like *1989*, *Lover*, and *Folklore*. Her knack for personal, storytelling lyrics is what truly connects with millions. And of course, we all cheered her on as she took control of her narrative by re-recording her early masters—a true boss move!
+      </p>
+      <p>
+        Her accolades are insane: 14 Grammy Awards (including four Album of the Year wins, a record!), plus a Primetime Emmy, 26 American Music Awards, and a record-shattering $1 billion from The Eras Tour. Named TIME’s Person of the Year in 2023, she's more than just an artist; she's an era.
+      </p>
+      <p>
+        She has worked incredibly hard for everything she has achieved and continues to inspire millions around the world with her dedication. Despite all the hurdles along the way, she has persevered and come out stronger than ever. Her journey is a testament to the power of resilience and passion—and that's why she's the greatest artist of all time, in my biased opinion!
+      </p>
+
+      <div class="mini-actions">
+        <a class="btn" href="https://store.taylorswift.com/" target="_blank" rel="noopener">Official Store</a>
+        <a class="btn" href="https://en.wikipedia.org/wiki/Taylor_Swift" target="_blank" rel="noopener">Wikipedia</a>
+        <a class="btn" href="https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02" target="_blank" rel="noopener">Stream on Spotify</a>
+      </div>
+    </div>
+
+    <div class="panel media" id="events">
+      <h2 class="h2">Events — The Eras Tour</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/Taylor_Swift_The_Eras_Tour_Evermore_Era_Set_%2853109927033%29.jpg" alt="Photo of Taylor Swift performing on The Eras Tour (Evermore Era)">
+      <span class="caption">Photo: Wikimedia Commons</span>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <h2 class="h2" style="padding-left:4px">Album Timeline — years & pictures</h2>
+    <div class="grid">
+      <div class="album-card">
+        <img src="https://www.udiscovermusic.com/wp-content/uploads/2018/09/Taylor-Swift-debut-album-cover-web-optimised-820.jpg" alt="Taylor Swift album cover">
+        <div class="info"><h4>Taylor Swift (Debut)</h4><div class="year">2006</div><div class="era">Country</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://th.bing.com/th/id/R.d763b3cd9d3bb1585c71ad0f37bf617e?rik=HNVAHqDrHfTbzQ&riu=http%3a%2f%2fimages4.fanpop.com%2fimage%2fphotos%2f14800000%2fFearless-Deluxe-Edition-FanMade-Album-Cover-fearless-taylor-swift-album-14881238-700-700.jpg&ehk=KOqg3Qbqg4LUbs68NedK74T4YJc9fFau8Q6ljnvlbP0%3d&risl=&pid=ImgRaw&r=0" alt="Fearless album cover">
+        <div class="info"><h4>Fearless</h4><div class="year">2008</div><div class="era">Country-pop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://www.slantmagazine.com/wp-content/uploads/2010/10/speaknow.jpg" alt="Speak Now album cover">
+        <div class="info"><h4>Speak Now</h4><div class="year">2010</div><div class="era">Self-written Pop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://cdn.wallpapersafari.com/46/65/YOpH92.jpg" alt="Red album cover">
+        <div class="info"><h4>Red</h4><div class="year">2012</div><div class="era">Pop Crossover</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/f/f6/Taylor_Swift_-_1989.png" alt="1989 album cover">
+        <div class="info"><h4>1989</h4><div class="year">2014</div><div class="era">Synth-pop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Taylor_Swift_-_Reputation.png" alt="Reputation album cover">
+        <div class="info"><h4>Reputation</h4><div class="year">2017</div><div class="era">Electropop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/c/cd/Taylor_Swift_-_Lover.png" alt="Lover album cover">
+        <div class="info"><h4>Lover</h4><div class="year">2019</div><div class="era">Pop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://i.pinimg.com/736x/11/ae/52/11ae521d384fbaade2dae38ab1fa335e.jpg" alt="Folklore album cover">
+        <div class="info"><h4>Folklore</h4><div class="year">2020</div><div class="era">Indie-folk</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/Taylor_Swift_-_Evermore.png" alt="Evermore album cover">
+        <div class="info"><h4>Evermore</h4><div class="year">2020</div><div class="era">Indie-folk</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://tse3.mm.bing.net/th/id/OIP.QWRdHd-42t2ioF302SLe5gAAAA?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Midnights album cover">
+        <div class="info"><h4>Midnights</h4><div class="year">2022</div><div class="era">Synth-pop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://tse1.mm.bing.net/th/id/OIP.d2UBwy40c3wWtjx6c0T1nQHaHa?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" alt="The Tortured Poets Department album cover">
+        <div class="info"><h4>The Tortured Poets Department</h4><div class="year">2024</div><div class="era">Synth-/Chamber-pop</div></div>
+      </div>
+      <div class="album-card">
+        <img src="https://images.prestigeonline.com/wp-content/uploads/sites/5/2025/08/18140026/tloas-album-cover-ophelia-painting-500x500.jpeg?tr=w-600" alt="The Life of a Showgirl album cover (Placeholder)">
+        <div class="info"><h4>The Life of a Showgirl</h4><div class="year">2025</div><div class="era">Soft rock / pop</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="favorites">
+    <h2 class="h2" style="padding-left:4px">My favorite album — TTPD</h2>
+    <div class="panel revealed">
+      <p>
+        Okay, choosing a favorite is impossible, but lately, this moody, raw, and absolutely heart-wrenching record has been on repeat. These are the tracks that hit hardest and never leave the rotation:
+      </p>
+      <ul class="songs">
+        <li><strong>Electric Touch</strong> (feat. Fall Out Boy)</li>
+        <li><strong>When Emma Falls in Love</strong></li>
+        <li><strong>mirrorball</strong></li>
+        <li><strong>The Great War</strong></li>
+        <li><strong>The Albatross</strong></li>
+        <li><strong>The Bolter</strong></li>
+        <li><strong>Father Figure</strong></li>
+        <li><strong>Eldest Daughter</strong></li>
+        <li><strong>If This Was a Movie (Taylor’s Version)</strong></li>
+        <li><strong>Carolina</strong></li>
+        <li><strong>All Too Well (10 minute version)</strong></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  const c = document.getElementById('starsCanvas');
+  const ctx = c.getContext('2d');
+  let stars = [], W=0, H=0;
+  let time = 0; 
+
+  function resize(){
+    W = c.width = window.innerWidth;
+    H = c.height = window.innerHeight;
+    
+    const count = Math.max(300, Math.floor((W*H)/5000)); 
+    stars = Array.from({length:count}, ()=>({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      r: Math.random()*5.0 + 3.0, 
+      a: Math.random()*0.5 + 0.2,
+      v: (Math.random()*0.5 + 0.1) * (Math.random()<0.5?-1:1), 
+      vy: Math.random() * 0.7 + 0.1,
+      ox: Math.random() * W, 
+      f: Math.random() * 0.05 + 0.01, 
+      amp: Math.random() * 2 + 1, 
+      color: ['#FF69B4', '#FFD700', '#9400D3'][Math.floor(Math.random() * 3)]
+    }));
+  }
+  function draw(){
+    time++; 
+    ctx.clearRect(0,0,W,H);
+    for(const s of stars){
+      // Opacity shimmer
+      s.a += s.v*0.004;
+      if(s.a<0.2 || s.a>0.7) s.v*=-1;
+
+      
+      s.y += s.vy;
+      
+  
+      s.x = s.ox + Math.sin(time * s.f) * s.amp * 20;
+
+      
+      if (s.y > H) {
+        s.y = -s.r;
+        s.ox = Math.random() * W; 
+        s.f = Math.random() * 0.05 + 0.01;
+        s.amp = Math.random() * 2 + 1;
+      }
+      
+      ctx.globalAlpha = s.a;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize);
+  resize(); draw();
+})();
+
+(function(){
+  const w1 = document.getElementById('wave1');
+  const w2 = document.getElementById('wave2');
+  const total = 1600;
+  w1.setAttribute('stroke-dasharray', total);
+  w2.setAttribute('stroke-dasharray', total);
+  let t = 0;
+  function step(){
+    t += 2;
+    w1.setAttribute('stroke-dashoffset', Math.sin(t/60)*200);
+    w2.setAttribute('stroke-dashoffset', Math.cos(t/80)*220);
+    requestAnimationFrame(step);
+  }
+  step();
+})();
+
+(function(){
+  const left = document.getElementById('heroLeft');
+  const right = document.getElementById('heroRight');
+  let raf = null;
+  function onMove(e){
+    const x = e.clientX, y = e.clientY;
+    if(raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(()=>{
+      const cx = window.innerWidth/2, cy = window.innerHeight/2;
+      const dx = (x - cx)/window.innerWidth, dy = (y - cy)/window.innerHeight;
+      left.style.transform = `translate3d(${dx*6}px, ${dy*4}px, 0)`;
+      right.style.transform = `translate3d(${dx*-6}px, ${dy*-4}px, 0)`;
+    });
+  }
+  window.addEventListener('pointermove', onMove);
+})();
+
+(function(){
+  const panels = document.querySelectorAll('.panel:not(.revealed)');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.2});
+  panels.forEach(p=>io.observe(p));
+})();
+
+(function(){
+  const cta = document.getElementById('listenCta');
+  function sparkle(x,y){
+    const s = document.createElement('div');
+    s.textContent = '✨';
+    s.style.position='fixed'; s.style.left=x+'px'; s.style.top=y+'px';
+    s.style.fontSize='26px'; s.style.filter='drop-shadow(0 4px 10px rgba(0,0,0,.35))';
+    s.style.transition='all 800ms ease'; document.body.appendChild(s);
+    requestAnimationFrame(()=>{ s.style.transform='translateY(-140px) rotate(20deg)'; s.style.opacity='0'; });
+    setTimeout(()=>s.remove(), 820);
+  }
+  cta.addEventListener('click', (e)=>sparkle(e.clientX, e.clientY));
+  window.addEventListener('keydown', (e)=>{
+    if(e.key.toLowerCase()==='l'){
+      window.open(cta.href,'_blank','noopener');
+    }
+  });
+})();
+
+</script>
+<footer>
+  Taylor Swift Page — Built by Netania Chetty <b>  <br>
+    All rights reserved © Taylor Swift </b>
+  </footer>
+</body>
+</html>
